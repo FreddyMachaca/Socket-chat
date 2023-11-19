@@ -1,11 +1,11 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Simple</title>
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAT SIMPLE</title>
+</head>
+<style>
     *,
     *::before,
     *::after {
@@ -24,8 +24,8 @@
       height: 100vh;
       padding: 36px;
       grid-template-rows: 1fr;
-      background-color: #2c2f33; /* Fondo similar a Discord */
-      color: #dcddde; /* Texto similar a Discord */
+      background-color: #2c2f33;
+      color: #dcddde; 
     }
   
     #messages {
@@ -43,11 +43,11 @@
     }
   
     #messages>li:nth-child(odd) {
-      background: #36393f; /* Fondo similar a Discord */
+      background: #36393f;
     }
   
     #chat {
-      border: 1px solid #40444b; /* Borde similar a Discord */
+      border: 1px solid #40444b;
       border-radius: 4px;
       overflow: hidden;
       width: 350px;
@@ -67,81 +67,78 @@
   
     #input {
       border-radius: 9999px;
-      border: 1px solid #40444b; /* Borde similar a Discord */
+      border: 1px solid #40444b;
       flex: 1;
       margin: 4px;
       padding: 0 8px;
-      background-color: #40444b; /* Fondo similar a Discord */
-      color: #dcddde; /* Texto similar a Discord */
+      background-color: #40444b; 
+      color: #dcddde; 
     }
   
     #input:focus {
       outline: 0;
-      border-color: #7289da; /* Borde azul cuando está enfocado (color de Discord) */
+      border-color: #7289da;
     }
   
     #form>button {
-      background: #7289da; /* Color de Discord */
-      color: #fff; /* Texto claro */
+      background: #7289da; 
+      color: #fff; 
       border: 0;
       margin: 4px;
       border-radius: 4px;
     }
   
     #form>button:hover {
-      background: #677bc4; /* Color de Discord en estado hover */
+      background: #677bc4; 
     }
-  </style>
-  
-</head>
+</style>
 <body>
-  <section id="chat">
-    <ul id="messages"></ul>
-    <form id="form">
-      <input type="text" name="message" id="input" placeholder="Type a message" autocomplete="off" />
-      <button type="submit">Enviar</button>
-    </form>
-  </section>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
-  <script>
+    <section id="chat">
+        <ul id="messages"></ul>
+        <form id="form">
+            <input type="text" name="message" id="input" placeholder="Escribe un mensaje" autocomplete="off">
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+<script>
     const socket = io.connect('http://192.168.0.14:3000');
     let usuarioNombre;
 
-    usuarioNombre = prompt('Por favor, ingresa tu nombre:');
-    
+    usuarioNombre = prompt('Ingresa tu nombre de usuario');
+
     socket.emit('nuevoUsuario', usuarioNombre);
 
-    // Añadir este código para manejar mensajes anteriores
+    //mostrar los mensajes anteriores
     socket.on('mensajesAnteriores', (mensajesAnteriores) => {
-      const chat = document.getElementById('messages');
-      mensajesAnteriores.forEach((mensaje) => {
-        const nuevoMensaje = document.createElement('li');
-        nuevoMensaje.textContent = `${mensaje.nombre}: ${mensaje.mensaje}`;
-        chat.appendChild(nuevoMensaje);
-      });
+        const chat = document.getElementById('messages');
+        mensajesAnteriores.forEach((mensaje) => {
+            const nuevoMensaje = document.createElement('li');
+            nuevoMensaje.textContent = `${mensaje.nombre}: ${mensaje.mensaje}`;
+            chat.appendChild(nuevoMensaje);
+        });
     });
 
     document.getElementById('form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      enviarMensaje();
+       e.preventDefault();
+       enviarMensaje();
     });
 
     function enviarMensaje() {
-      const mensajeInput = document.getElementById('input');
-      const mensaje = mensajeInput.value;
-      if (mensaje.trim() !== '') {
-        socket.emit('mensaje', { nombre: usuarioNombre, mensaje: mensaje });
-        mensajeInput.value = '';
-      }
+       const mensajeInput = document.getElementById('input');
+        const mensaje = mensajeInput.value;
+        if(mensaje.trim() !== '') {
+            socket.emit('mensaje', {nombre: usuarioNombre, mensaje: mensaje});
+            mensajeInput.value = '';
+        }
     }
 
-    socket.on('mensaje', (data) => {
-      const chat = document.getElementById('messages');
-      const nuevoMensaje = document.createElement('li');
-      nuevoMensaje.textContent = `${data.nombre}: ${data.mensaje}`;
-      chat.appendChild(nuevoMensaje);
+    socket.on('mensaje', (data) =>{
+        const chat = document.getElementById('messages');
+        const nuevoMensaje = document.createElement('li');
+        nuevoMensaje.textContent = `${data.nombre}: ${data.mensaje}`;
+        chat.appendChild(nuevoMensaje);
     });
-  </script>
-</body>
+</script>
 </html>
