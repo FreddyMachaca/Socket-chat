@@ -1,2 +1,2 @@
 # Socket-chat
-with Node.js, Socket.io
+Proyecto desarollado con: Socket.IO, Node.js, Express y TursoDB
